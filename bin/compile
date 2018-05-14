@@ -19,6 +19,11 @@ indent() { sed 's|^|       |'; }
 CURL_USER_AGENT="Heroku Buildpack D $(curl --version | head -n 1)"
 curl() { command curl -fsSL --retry 3 -A "${CURL_USER_AGENT}" "$@"; }
 
+if [ -f "$BUILD_DIR/.d-pre-install-env" ]; then
+    echo "-----> Sourcing pre-install env"
+    . "$BUILD_DIR/.d-pre-install-env"
+fi
+
 activate_path="$(curl -fsS https://dlang.org/install.sh | SHELL=bash bash -s $compiler --path "$CACHE_DIR" --activate)"
 set +u
 source "$activate_path"

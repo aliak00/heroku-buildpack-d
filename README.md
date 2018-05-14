@@ -68,6 +68,10 @@ ldc and to choose a specific compiler versions by adding a `.d-compiler` file to
 your project. Use `dmd`, `ldc`, or `gdc` to select the latest or `dmd-2.068.2`,
 `ldc-0.16.0`, or `gdc-4.9.2` to select a specific version of a compiler.
 
+# Preinstall env
+
+If there's a `.d-pre-install-env` file present in your root dir, it will be sourced.
+
 # Precompile step
 
 You can add a `.d-pre-compile` script to your root directory and that will be executed
