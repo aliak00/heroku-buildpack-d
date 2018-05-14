@@ -5,6 +5,7 @@ set -ueo pipefail
 
 BUILD_DIR="$1"
 CACHE_DIR="$2"
+ENV_DIR="$3"
 
 compiler=dmd
 if [ -f "$BUILD_DIR/.d-compiler" ]; then
@@ -46,6 +47,12 @@ echo '-----> Using ld.gold'
 ${LD:-ld} -v | indent
 
 cd "$BUILD_DIR"
+
+if [ -f ".d-pre-compile" ]; then
+    echo "-----> Running pre-compile step"
+    sh .d-pre-compile $BUILD_DIR $CACHE_DIR $ENV_DIR
+fi
+
 echo "-----> Building application with dub"
 
 dub build -b release --compiler=$DC 2>&1 | indent
