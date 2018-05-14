@@ -7,11 +7,6 @@ BUILD_DIR="$1"
 CACHE_DIR="$2"
 ENV_DIR="$3"
 
-compiler=dmd
-if [ -f "$BUILD_DIR/.d-compiler" ]; then
-    compiler=$(cat "$BUILD_DIR/.d-compiler")
-fi
-
 os=linux
 
 indent() { sed 's|^|       |'; }
@@ -24,11 +19,13 @@ if [ -f "$BUILD_DIR/.d-pre-install-env" ]; then
     . "$BUILD_DIR/.d-pre-install-env"
 fi
 
-activate_path="$(curl -fsS https://dlang.org/install.sh | SHELL=bash bash -s $compiler --path "$CACHE_DIR" --activate)"
+D_COMPILER=${D_COMPILER:-dmd}
+
+activate_path="$(curl -fsS https://dlang.org/install.sh | SHELL=bash bash -s $D_COMPILER --path "$CACHE_DIR" --activate)"
 set +u
 source "$activate_path"
 set -u
-echo "-----> Using $compiler"
+echo "-----> Using $D_COMPILER"
 $DC --version | indent
 echo '-----> Using dub'
 dub --version | indent
@@ -44,7 +41,7 @@ if [ ! -d "$CACHE_DIR/linker" ]; then
     ln -sf /usr/bin/ld.gold "$CACHE_DIR/linker/ld"
 fi
 export PATH="$CACHE_DIR/linker:$PATH"
-if [[ $compiler = dmd* ]]; then
+if [[ $D_COMPILER = dmd* ]]; then
     echo '-----> Using cc'
     ${CC:-cc} -v 2>&1 | indent
 fi

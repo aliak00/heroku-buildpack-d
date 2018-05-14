@@ -61,18 +61,19 @@ You can add a custom [`Procfile`](https://devcenter.heroku.com/articles/procfile
 
 And finally see [Deploy on Heroku - Dlang Tour](https://tour.dlang.org/tour/en/vibed/deploy-on-heroku) for more details.
 
-# Selecting a D compiler
+# Hooks
 
-By default the latest dmd compiler is used. It is also possible to use gdc or
-ldc and to choose a specific compiler versions by adding a `.d-compiler` file to
-your project. Use `dmd`, `ldc`, or `gdc` to select the latest or `dmd-2.068.2`,
-`ldc-0.16.0`, or `gdc-4.9.2` to select a specific version of a compiler.
+## Preinstall env
 
-# Preinstall env
+If there's a `.d-pre-install-env` file present in your root dir, it will be sourced. The
+buildpack uses https://dlang.org/install.sh to install a compiler and there are a number
+of env vars that can be controlled via this. Some predefined env vars can also be used:
 
-If there's a `.d-pre-install-env` file present in your root dir, it will be sourced.
+* D_COMPILER: By default the latest dmd compiler is used. It is  possible to use gdc or
+ldc and to choose a specific compiler versions by setting this var. Use `dmd`, `ldc`,
+or `gdc` to select the latest or `dmd-2.068.2`, `ldc-0.16.0`, or `gdc-4.9.2` to select a specific version of a compiler.
 
-# Precompile step
+## Precompile step
 
 You can add a `.d-pre-compile` script to your root directory and that will be executed
 before `dub build`
